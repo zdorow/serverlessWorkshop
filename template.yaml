@@ -27,6 +27,9 @@ Globals:
 
 Resources:
 
+  ImageStore:
+    Type: AWS::S3::Bucket
+
 # API Resources
 
   WorkshopApi:
@@ -35,6 +38,10 @@ Resources:
       StageName: Prod
       OpenApiVersion: '3.0.2'
       EndpointConfiguration: REGIONAL
+      BinaryMediaTypes:
+        - 'application/octet-stream'
+        - 'image/*'
+        - 'multipart/form-data'
       Auth:
         DefaultAuthorizer: CognitoAuthorizer
         Authorizers:
@@ -47,6 +54,12 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: ./src/post_image
+      Environment:
+        Variables:
+          BUCKET_NAME: !Ref ImageStore
+      Policies:
+        - S3CrudPolicy:
+            BucketName: !Ref ImageStore
       Events:
         PostImage:
           Type: Api
@@ -54,8 +67,6 @@ Resources:
             Path: /api/images
             Method: post
             RestApiId: !Ref WorkshopApi
-#            AuthorizationScopes:
-#              - "workshop-api/allow"
 
   List:
     Type: AWS::Serverless::Function
