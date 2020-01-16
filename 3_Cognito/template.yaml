@@ -16,6 +16,15 @@ Parameters:
     Type: AWS::SSM::Parameter::Value<String>
     Default: /workshop/hosted_zone_id
 
+  UserPoolArn:
+    Type: AWS::SSM::Parameter::Value<String>
+    Default: /workshop/cognito_pool_arn
+
+Globals:
+  Function:
+    Runtime: python3.8
+    Handler: index.lambda_handler
+
 Resources:
 
 # API Resources
@@ -26,19 +35,38 @@ Resources:
       StageName: Prod
       OpenApiVersion: '3.0.2'
       EndpointConfiguration: REGIONAL
+      Auth:
+        DefaultAuthorizer: CognitoAuthorizer
+        Authorizers:
+          CognitoAuthorizer:
+            UserPoolArn: !Ref UserPoolArn
+            AuthorizationScopes:
+              - "workshop-api/allow"
 
   Upload:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: ./src/post_image
-      Runtime: python3.8
-      Handler: index.lambda_handler
       Events:
         PostImage:
           Type: Api
           Properties:
             Path: /api/images
             Method: post
+            RestApiId: !Ref WorkshopApi
+#            AuthorizationScopes:
+#              - "workshop-api/allow"
+
+  List:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ./src/get_images
+      Events:
+        GetImages:
+          Type: Api
+          Properties:
+            Path: /api/images
+            Method: get
             RestApiId: !Ref WorkshopApi
 
 # Route 53 Domain Resources
