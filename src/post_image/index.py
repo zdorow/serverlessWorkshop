@@ -9,7 +9,8 @@ def lambda_handler(event, context):
             {
                 "message": "Success!",
                 "path": event['path'],
-                "method": event['httpMethod']
+                "method": event['httpMethod'],
+                "token_claims": event['requestContext']['authorizer']['claims']
             }
         ),
         "headers": {

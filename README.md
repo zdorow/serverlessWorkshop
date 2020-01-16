@@ -1,26 +1,18 @@
 # SubZero Workshop
 
-## Pipeline Update
+## Cognito
 
-Update your pipeline using [pipeline-template.yaml](pipeline-template.yaml) before continuing.
-
-## Base API
-
-With a pipeline in place, create the base API for the application. Your updates will automatically deploy as you push commits to GitHub.
+Secure the application API using a Cognito User Pool.
 
 ### AWS Services / Features
 
-- Serverless (SAM) Transform
-- API Gateway
-- Lambda
-- Route 53
+- Cognito
+- API Gateway Cognito Authorizer
 
 ### Module Challenge
 
-Add a second `AWS::Serverless::Function` resource to the template to create a `GET /api/images` endpoint. Use `/src/get_images` for the `CodeUri`. 
+Use the Postman collection for this module to test the API endpoints with and without access tokens using the client credentials provided. The endpoints will return information about the claims in the access token.
 
-As an additional challenge update both Lambda function resources to use SAM's `Globals` feature.
-
-### Next Module: [Cognito](../3_Cognito/)
+### Next Module: [Image Uploads](../4_Image_Uploads/)
 
 Once instructed, move on to the next module and update your repository with the provided files (overwrite existing files and your changes).
