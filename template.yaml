@@ -72,6 +72,12 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: ./src/get_images
+      Environment:
+        Variables:
+          BUCKET_NAME: !Ref ImageStore
+      Policies:
+        - S3CrudPolicy:
+            BucketName: !Ref ImageStore
       Events:
         GetImages:
           Type: Api
