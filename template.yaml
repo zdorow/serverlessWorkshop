@@ -41,6 +41,20 @@ Resources:
             Method: post
             RestApiId: !Ref WorkshopApi
 
+  Get:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ./src/post_image
+      Runtime: python3.8
+      Handler: index.lambda_handler
+      Events:
+        PostImage:
+          Type: Api
+          Properties:
+            Path: /api/images
+            Method: get
+            RestApiId: !Ref WorkshopApi
+
 # Route 53 Domain Resources
 
   ApiCustomDomain:
